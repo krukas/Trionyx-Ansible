@@ -1,0 +1,17 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    root {{ app_webroot_path }};
+    server_name {{ app_domain }} www.{{ app_domain }};
+
+    location /.well-known {
+        alias {{ app_webroot_path }}/.well-known;
+        default_type text/plain;
+        allow all;
+    }
+
+    location / {
+        return 301 https://{{ app_domain }}$request_uri;
+    }
+}

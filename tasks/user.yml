@@ -1,0 +1,33 @@
+---
+- name: "[USER] Create  user"
+  become: yes
+  user:
+    name: "{{ app_user }}"
+    shell: /bin/bash
+    create_home: yes
+
+- name: "[USER] Create .ssh directory"
+  become: yes
+  become_user: "{{ app_user }}"
+  file:
+    path: "/home/{{ app_user }}/.ssh"
+    state: directory
+    mode: 0755
+
+- name: "[USER] Create app directory"
+  become: yes
+  become_user: "{{ app_user }}"
+  file:
+    path: "/home/{{ app_user }}/application"
+    state: directory
+    mode: 0755
+
+- name: "[USER] Add deploy key"
+  become: yes
+  become_user: "{{ app_user }}"
+  template:
+    src: "templates/deploy_key.j2"
+    dest: "/home/{{ app_user }}/.ssh/deploy.key"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0600

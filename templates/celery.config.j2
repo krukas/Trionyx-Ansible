@@ -1,0 +1,23 @@
+CELERYD_NODES="cron_worker low_prio_worker high_prio_worker"
+
+# Absolute or relative path to the 'celery' command:
+CELERY_BIN="{{ app_environment_path }}/bin/celery"
+
+CELERY_APP="celery_app"
+
+# Extra command-line arguments to the worker
+CELERYD_OPTS="-Ofair \
+-Q:cron_worker          cron        -c:cron_worker      {{ (ansible_processor_vcpus * 2) | int }} \
+-Q:low_prio_worker      low_prio    -c:low_prio_worker  {{ (ansible_processor_vcpus * 4) | int }} \
+-Q:high_prio_worker     high_prio   -c:high_prio_worker {{ (ansible_processor_vcpus * 1) | int }}"
+
+# - %n will be replaced with the first part of the nodename.
+# - %I will be replaced with the current child process index
+#   and is important when using the prefork pool to avoid race conditions.
+CELERYD_PID_FILE="/var/run/celery/%n.pid"
+CELERYD_LOG_FILE="/var/log/celery/%n%I.log"
+CELERYD_LOG_LEVEL="ERROR"
+
+
+CELERYBEAT_PID_FILE="/var/run/celery/beat_%n.pid"
+CELERYBEAT_LOG_FILE="/var/log/celery/beat_%n%I.beat.log"

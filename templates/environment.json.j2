@@ -1,0 +1,13 @@
+{
+  "SECRET_KEY": "{{ secret_key }}",
+  "ALLOWED_HOSTS": ["www.{{ app_domain }}", "{{ app_domain }}"],
+  "CELERY_BROKER_URL": "amqp://{{ app_user }}:{{ broker_password }}@localhost:5672//",
+  "DEFAULT_DATABASE": {
+      "ENGINE": "django.db.backends.postgresql",
+      "NAME": "{{ db_name }}",
+      "USER": "{{ db_username }}",
+      "PASSWORD": "{{ db_password }}",
+      "HOST": "localhost",
+      "PORT": "{{ db_pool_port }}"
+  }
+}

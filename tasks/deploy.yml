@@ -1,0 +1,73 @@
+---
+- name: "[DEPLOY] Install build files"
+  become: yes
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - build-essential
+      - python3-virtualenv
+      - python3-dev
+      - python3-setuptools
+      - python3-wheel
+      - python3-cffi
+      - libcairo2
+      - libpango-1.0-0
+      - libpangocairo-1.0-0
+      - libgdk-pixbuf2.0-0
+      - libffi-dev
+      - shared-mime-info
+
+- name: "DEPLOY"
+  become: yes
+  become_user: "{{ app_user }}"
+  block:
+    - name: "[DEPLOY] pull latest version from master"
+      git:
+        repo: "{{ apo_repo }}"
+        dest: "{{ app_path }}"
+        key_file: "/home/{{ app_user }}/.ssh/deploy.key"
+        accept_hostkey: yes
+      notify: gunicorn restart
+
+    - name: "[DEPLOY] Install requirements" 
+      pip:
+        requirements: "{{ app_path}}/requirements.txt"
+        virtualenv: "{{ app_environment_path }}"
+        virtualenv_python: python3
+        extra_args: --upgrade
+
+    - name: "[DEPLOY] Update config"
+      template:
+        src: "{{ app_config_template }}"
+        dest: "{{ app_path }}/environment.json"
+        mode: 0600
+      notify:
+        - gunicorn restart
+        - celery restart
+        - celerybeat restart
+
+    - name: "[DEPLOY] Migrate"
+      django_manage:
+        command: migrate
+        app_path: "{{ app_path }}"
+        virtualenv: "{{ app_environment_path }}"
+
+    - name: "[DEPLOY] Create cache tables"
+      django_manage:
+        command: createcachetable
+        app_path: "{{ app_path }}"
+        virtualenv: "{{ app_environment_path }}"
+
+    - name: "[DEPLOY] Collect static"
+      django_manage:
+        command: collectstatic
+        app_path: "{{ app_path }}"
+        virtualenv: "{{ app_environment_path }}"
+
+    - name: "[DEPLOY] compress"
+      django_manage:
+        command: compress
+        app_path: "{{ app_path }}"
+        virtualenv: "{{ app_environment_path }}"

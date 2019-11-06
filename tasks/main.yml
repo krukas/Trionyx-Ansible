@@ -1,0 +1,35 @@
+---
+- name: Common
+  import_tasks: common.yml
+  tags:
+    - common
+
+- name: User
+  import_tasks: user.yml
+  tags:
+    - user
+
+- name: Datanase
+  import_tasks: database.yml
+  tags:
+    - database
+
+- name: Gunicorn
+  import_tasks: gunicorn.yml
+  tags:
+    - gunicorn
+
+- name: Web
+  import_tasks: web.yml
+  tags:
+    - web
+
+- name: Celery
+  import_tasks: celery.yml
+  tags:
+    - celery
+
+- name: Deploy
+  import_tasks: deploy.yml
+  tags:
+    - deploy

@@ -1,0 +1,56 @@
+- name: "[GUNICORN] Install python3"
+  become: yes
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - python3
+    - python-virtualenv
+    - python3-pip
+    - python3-dev
+
+- name: "[GUNICORN] Install"
+  become: yes
+  become_user: "{{ app_user }}"
+  pip:
+    name:
+      - gunicorn==19.9.0
+      - gevent==1.4.0
+      - psycopg2-binary
+    virtualenv: "{{ app_environment_path }}"
+    virtualenv_python: python3
+
+- name: "[GUNICORN] Create config directory"
+  become: yes
+  file:
+    path: /etc/gunicorn.d
+    state: directory
+    mode: 0644
+
+- name: "[GUNICORN] Update config"
+  become: yes
+  copy:
+    src: files/gunicorn.py
+    dest: /etc/gunicorn.d/gunicorn.py
+    owner: root
+    group: root
+    mode: 0644
+  notify: gunicorn restart
+
+- name: "[GUNICORN] Systemd service file"
+  become: yes
+  template:
+    src: "templates/gunicorn.service.j2"
+    dest: "/etc/systemd/system/gunicorn.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: gunicorn restart
+
+- name: "[GUNICORN] Enable service"
+  become: yes
+  systemd:
+    name: gunicorn
+    daemon_reload: yes
+    enabled: yes

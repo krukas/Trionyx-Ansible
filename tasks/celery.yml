@@ -1,0 +1,72 @@
+---
+- name: "[CELERY] Install rabbitmq"
+  become: yes
+  apt:
+    name: rabbitmq-server
+    state: present
+
+- name: "[CELERY] Create rabbitmq user"
+  become: yes
+  rabbitmq_user:
+    user: "{{ app_user }}"
+    password: "{{ broker_password }}"
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+
+- name: "[CELERY] Create log directory"
+  become: yes
+  file:
+    path: /var/log/celery
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0755
+
+- name: "[CELERY] Update config"
+  become: yes
+  template:
+    src: "templates/celery.config.j2"
+    dest: "/etc/default/celery"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - celery restart
+    - celerybeat restart
+
+- name: "[CELERY] Systemd celery service file"
+  become: yes
+  template:
+    src: "templates/celery.service.j2"
+    dest: "/etc/systemd/system/celery.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: celery restart
+
+- name: "[CELERY] Enable celery service"
+  become: yes
+  systemd:
+    name: celery
+    daemon_reload: yes
+    enabled: yes
+
+- name: "[CELERY] Systemd celerybeat service file"
+  become: yes
+  template:
+    src: "templates/celerybeat.service.j2"
+    dest: "/etc/systemd/system/celerybeat.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: celerybeat restart
+
+- name: "[CELERY] Enable celerybeat service"
+  become: yes
+  systemd:
+    name: celerybeat
+    daemon_reload: yes
+    enabled: yes

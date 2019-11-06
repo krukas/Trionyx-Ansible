@@ -1,0 +1,31 @@
+---
+- name: postgresql restart
+  become: yes
+  service:
+    name: postgresql
+    state: restarted
+- name: pgbouncer restart
+  become: yes
+  service:
+    name: pgbouncer
+    state: restarted
+- name: nginx restart
+  become: yes
+  service:
+    name: nginx
+    state: restarted
+- name: gunicorn restart
+  become: yes
+  service:
+    name: gunicorn
+    state: restarted
+- name: celery restart
+  become: yes
+  service:
+    name: celery
+    state: restarted
+- name: celerybeat restart
+  become: yes
+  service:
+    name: celerybeat
+    state: restarted

@@ -1,0 +1,68 @@
+---
+- name: "[COMMON] Update hostname"
+  become: yes
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: "[COMMON] Update hosts file"
+  become: yes
+  template:
+    src: "templates/hosts.j2"
+    dest: /etc/hosts
+    owner:  root
+    group: root
+    mode: 0644
+
+- name: "[COMMON] Add deploy key"
+  template:
+    src: "templates/deploy_key.j2"
+    dest: "{{ deploy_key_path }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0600
+
+# Setup NTP/Timezone
+- name: "[COMMON] Enable NTP"
+  become: yes
+  command: timedatectl set-ntp true
+
+- name: "[COMMON] Set timezone"
+  become: yes
+  timezone:
+    name: "{{ ntp_timezone }}"
+
+- name: "[COMMON] Restart cron"
+  become: yes
+  service:
+    name: cron
+    state: restarted
+
+# Setup UFW firewall
+- name: "[COMMON] Install ufw"
+  become: yes
+  apt:
+    name: "ufw"
+    state: present
+
+- name: "[COMMON] UFW: Add SSH rule to"
+  become: yes
+  ufw:
+    rule: allow
+    port: "{{ ansible_ssh_port }}"
+
+- name: "[COMMON] UFW: Set incoming policy to deny all"
+  become: yes
+  ufw:
+    direction: incoming
+    policy: deny
+
+- name: "[COMMON] UFW: Set outgoing policy to allow all"
+  become: yes
+  ufw:
+    direction: outgoing
+    policy: allow
+
+- name: "[COMMON] Enable ufw"
+  become: yes
+  ufw:
+    state: enabled

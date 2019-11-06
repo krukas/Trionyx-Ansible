@@ -1,0 +1,67 @@
+---
+- name: "[DATABASE] Install PostgreSQL"
+  become: yes
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - postgresql
+    - postgresql-contrib
+    - libpq-dev
+    - python-dev
+
+- name: "[DATABASE] install psycopg2"
+  become: yes
+  pip:
+    name: psycopg2
+
+- name: "[DATABASE] PostgreSQL: Update config"
+  become: yes
+  template:
+    src: "templates/postgresql.conf.j2"
+    dest: "/etc/postgresql/10/main/postgresql.conf"
+    owner: postgres
+    group: postgres
+    mode: 0644
+  notify: postgresql restart
+
+- name: "[DATABASE] PostgreSQL: Create user"
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{ db_username }}"
+    password: "{{ db_password }}"
+
+- name: "[DATABASE] PostgreSQL: Create DB"
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+    owner: "{{ db_username }}"
+
+- name: "[DATABASE] Install pgbouncer"
+  become: yes
+  apt:
+    name: pgbouncer
+    state: present
+
+- name: "[DATABASE] Update pgbouncer config"
+  become: yes
+  template:
+    src: "templates/pgbouncer.ini.j2"
+    dest: "/etc/pgbouncer/pgbouncer.ini"
+    owner: postgres
+    group: postgres
+    mode: 0640
+  notify: pgbouncer restart
+
+- name: "[DATABASE] Update pgbouncer users"
+  become: yes
+  template:
+    src: "templates/userlist.txt.j2"
+    dest: "/etc/pgbouncer/userlist.txt"
+    owner: postgres
+    group: postgres
+    mode: 0640
+  notify: pgbouncer restart

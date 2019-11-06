@@ -1,0 +1,5 @@
+---
+app_socket: "/home/{{ app_user }}/.app.sock"
+app_path: "/home/{{ app_user }}/application"
+app_environment_path: "/home/{{ app_user }}/environment"
+app_webroot_path: "/var/www/{{ app_user }}"

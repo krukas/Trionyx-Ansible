@@ -1,0 +1,99 @@
+---
+- name: "[WEB] Install nginx"
+  become: yes
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - openssl
+      - nginx
+      - certbot
+
+- name: "[WEB] Add UFW rule for port 80"
+  become: yes
+  ufw:
+    rule: allow
+    port: 80
+
+- name: "[WEB] Add UFW rule for port 443"
+  become: yes
+  ufw:
+    rule: allow
+    port: 443
+
+- name: "[WEB] Remove nginx default"
+  become: yes
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: nginx restart
+
+- name: "[WEB] Update nginx config"
+  become: yes
+  template:
+    src: "templates/nginx.conf.j2"
+    dest: "/etc/nginx/nginx.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: nginx restart
+
+- name: "[WEB] Generate a Self Signed OpenSSL certificate"
+  become: yes
+  command: 'openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/localhost.key -out /etc/ssl/certs/localhost.crt -subj "/C=NL/ST=Trionyx/L=Amsterdam/O=Dis/CN=app.local.trionyx.com"'
+  args:
+    creates: /etc/ssl/private/localhost.key
+
+- name: "[WEB] Create webroot directory"
+  become: yes
+  file:
+    path: "{{ app_webroot_path }}"
+    state: directory
+    mode: 0755
+    owner: www-data
+    group: www-data
+
+- name: "[WEB] Config host 80"
+  become: yes
+  template:
+    src: "templates/nginx-host.j2"
+    dest: "/etc/nginx/sites-enabled/{{ app_user }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "[WEB] restart nginx"
+  become: yes
+  service:
+    name: nginx
+    state: restarted
+
+- name: "[WEB] Create Letsencrypt cert"
+  become: yes
+  command: "certbot certonly --non-interactive --webroot --email info@workbundle.net --keep-until-expiring --expand --agree-tos -w {{ app_webroot_path }} -d {{ app_domain }} -w {{ app_webroot_path }} -d www.{{ app_domain }}"
+  args:
+    creates: "/etc/letsencrypt/live/{{ app_domain }}"
+
+- name: "[WEB] Create Letsencrypt crontab"
+  become: yes
+  cron:
+    name: "Letsencrypt {{ app_domain }} renewel"
+    minute: "33"
+    hour: "2"
+    job: certbot renew --post-hook "systemctl reload nginx"
+
+- name: "[WEB] Config host ssl"
+  become: yes
+  template:
+    src: "templates/nginx-host-ssl.j2"
+    dest: "/etc/nginx/sites-enabled/{{ app_user }}-ssl"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "[WEB] restart nginx"
+  become: yes
+  service:
+    name: nginx
+    state: restarted

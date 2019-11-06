@@ -1,0 +1,22 @@
+---
+ansible_ssh_user: "ansible"
+ansible_ssh_port: 6969
+
+apo_repo: git@github.com:krukas/Trionyx.git
+app_config_template: templates/environment.json.j2
+secret_key: mot-secure-key
+
+app_user: trionyx
+app_domain: trionyx.localhost
+
+ntp_timezone: Etc/UTC
+
+deploy_key_path: /home/ansible/.ssh/deploy.key
+deploy_key: Confire this in you inventories
+
+db_name: trionyx
+db_username: trionyx
+db_password: not-secure-password
+db_pool_port: 6432
+
+broker_password: not-secure-password
