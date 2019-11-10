@@ -25,7 +25,7 @@
   block:
     - name: "[DEPLOY] pull latest version from master"
       git:
-        repo: "{{ apo_repo }}"
+        repo: "{{ app_repo }}"
         dest: "{{ app_path }}"
         key_file: "/home/{{ app_user }}/.ssh/deploy.key"
         accept_hostkey: yes
