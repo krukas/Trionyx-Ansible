@@ -3,7 +3,7 @@ server {
     listen [::]:80;
 
     root {{ app_webroot_path }};
-    server_name {{ app_domain }} www.{{ app_domain }};
+    server_name {{ app_domain }};
 
     location /.well-known {
         alias {{ app_webroot_path }}/.well-known;

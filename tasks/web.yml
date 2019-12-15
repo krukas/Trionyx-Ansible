@@ -71,7 +71,7 @@
 
 - name: "[WEB] Create Letsencrypt cert"
   become: yes
-  command: "certbot certonly --non-interactive --webroot --email info@workbundle.net --keep-until-expiring --expand --agree-tos -w {{ app_webroot_path }} -d {{ app_domain }} -w {{ app_webroot_path }} -d www.{{ app_domain }}"
+  command: "certbot certonly --non-interactive --webroot --email info@workbundle.net --keep-until-expiring --expand --agree-tos -w {{ app_webroot_path }} -d {{ app_domain }}"
   args:
     creates: "/etc/letsencrypt/live/{{ app_domain }}"
 

@@ -1,6 +1,6 @@
 {
   "SECRET_KEY": "{{ secret_key }}",
-  "ALLOWED_HOSTS": ["www.{{ app_domain }}", "{{ app_domain }}"],
+  "ALLOWED_HOSTS": ["{{ app_domain }}"],
   "CELERY_BROKER_URL": "amqp://{{ app_user }}:{{ broker_password }}@localhost:5672//",
   "DATABASES": {
     "default": {
