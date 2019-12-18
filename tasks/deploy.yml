@@ -30,7 +30,10 @@
         version: "{{ app_repo_version }}"
         key_file: "/home/{{ app_user }}/.ssh/deploy.key"
         accept_hostkey: yes
-      notify: gunicorn restart
+      notify:
+        - celery restart
+        - celerybeat restart
+        - gunicorn restart
 
     - name: "[DEPLOY] Install requirements" 
       pip:

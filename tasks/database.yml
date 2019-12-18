@@ -65,3 +65,6 @@
     group: postgres
     mode: 0640
   notify: pgbouncer restart
+
+- name: "[DATABASE] Flush handlers"
+  meta: flush_handlers
