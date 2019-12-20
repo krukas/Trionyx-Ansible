@@ -19,7 +19,7 @@
 - name: "[DATABASE] PostgreSQL: Update config"
   become: yes
   template:
-    src: "templates/postgresql.conf.j2"
+    src: "templates/database/postgresql.conf.j2"
     dest: "/etc/postgresql/10/main/postgresql.conf"
     owner: postgres
     group: postgres
@@ -29,7 +29,7 @@
 - name: "[DATABASE] PostgreSQL: Update pg_hba"
   become: yes
   template:
-    src: "templates/pg_hba.conf.j2"
+    src: "templates/database/pg_hba.conf.j2"
     dest: "/etc/postgresql/10/main/pg_hba.conf"
     owner: postgres
     group: postgres
@@ -54,7 +54,7 @@
   become: yes
   become_user: "{{ app_user }}"
   template:
-    src: "templates/pgpass.j2"
+    src: "templates/database/pgpass.j2"
     dest: "/home/{{ app_user }}/.pgpass"
     owner: "{{ app_user }}"
     group: "{{ app_user }}"
@@ -86,7 +86,7 @@
 - name: "[DATABASE] Update pgbouncer config"
   become: yes
   template:
-    src: "templates/pgbouncer.ini.j2"
+    src: "templates/database/pgbouncer.ini.j2"
     dest: "/etc/pgbouncer/pgbouncer.ini"
     owner: postgres
     group: postgres
@@ -96,7 +96,7 @@
 - name: "[DATABASE] Update pgbouncer users"
   become: yes
   template:
-    src: "templates/userlist.txt.j2"
+    src: "templates/database/userlist.txt.j2"
     dest: "/etc/pgbouncer/userlist.txt"
     owner: postgres
     group: postgres

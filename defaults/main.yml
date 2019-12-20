@@ -4,7 +4,7 @@ ansible_ssh_port: 6969
 
 app_repo: git@github.com:krukas/Trionyx.git
 app_repo_version: HEAD
-app_config_template: templates/environment.json.j2
+app_config_template: templates/deploy/environment.json.j2
 secret_key: mot-secure-key
 
 app_user: trionyx

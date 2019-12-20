@@ -32,7 +32,7 @@
 - name: "[WEB] Update nginx config"
   become: yes
   template:
-    src: "templates/nginx.conf.j2"
+    src: "templates/web/nginx.conf.j2"
     dest: "/etc/nginx/nginx.conf"
     owner: root
     group: root
@@ -57,7 +57,7 @@
 - name: "[WEB] Config host 80"
   become: yes
   template:
-    src: "templates/nginx-host.j2"
+    src: "templates/web/nginx-host.j2"
     dest: "/etc/nginx/sites-enabled/{{ app_user }}"
     owner: root
     group: root
@@ -86,7 +86,7 @@
 - name: "[WEB] Config host ssl"
   become: yes
   template:
-    src: "templates/nginx-host-ssl.j2"
+    src: "templates/web/nginx-host-ssl.j2"
     dest: "/etc/nginx/sites-enabled/{{ app_user }}-ssl"
     owner: root
     group: root

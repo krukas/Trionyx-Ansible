@@ -28,7 +28,7 @@
 - name: "[CELERY] Update config"
   become: yes
   template:
-    src: "templates/celery.config.j2"
+    src: "templates/celery/celery.config.j2"
     dest: "/etc/default/celery"
     owner: root
     group: root
@@ -40,7 +40,7 @@
 - name: "[CELERY] Systemd celery service file"
   become: yes
   template:
-    src: "templates/celery.service.j2"
+    src: "templates/celery/celery.service.j2"
     dest: "/etc/systemd/system/celery.service"
     owner: root
     group: root
@@ -57,7 +57,7 @@
 - name: "[CELERY] Systemd celerybeat service file"
   become: yes
   template:
-    src: "templates/celerybeat.service.j2"
+    src: "templates/celery/celerybeat.service.j2"
     dest: "/etc/systemd/system/celerybeat.service"
     owner: root
     group: root
