@@ -50,6 +50,31 @@
     name: "{{ db_name }}"
     owner: "{{ db_username }}"
 
+- name: "[DATABASE] PostgreSQL: Update pgpass"
+  become: yes
+  become_user: "{{ app_user }}"
+  template:
+    src: "templates/pgpass.j2"
+    dest: "/home/{{ app_user }}/.pgpass"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0600
+
+- name: "[DATABASE] Create backup directory"
+  become: yes
+  become_user: "{{ app_user }}"
+  file:
+    path: "/home/{{ app_user }}/backups"
+    state: directory
+    mode: 0755
+
+- name: "[DATABASE] Enable cron backup"
+  cron:
+    name: "DB cron backup"
+    minute: "0"
+    hour: "3"
+    job: 'pg_dump {{ db_name }} > "/home/{{ app_user }}/backups/$(date '+%A').sql"'
+
 - name: "[DATABASE] Install pgbouncer"
   become: yes
   apt:
