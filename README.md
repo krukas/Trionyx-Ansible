@@ -1,6 +1,13 @@
 Trionyx Ansible
 ===============
 
+An Ansible role to setup a complete [Trionyx](https://github.com/krukas/Trionyx) environment on a clean Ubuntu server.
+
+Setup an Ansible project that uses this role with:
+
+```shell
+trionyx create_ansible <domain> <repo>
+```
 
 Setup your host
 ~~~~~~~~~~~~~~~
