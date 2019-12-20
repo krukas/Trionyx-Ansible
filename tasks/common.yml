@@ -21,6 +21,13 @@
     group: "{{ ansible_ssh_user }}"
     mode: 0600
 
+- name: "[COMMON] Update .bashrc"
+  become: yes
+  copy:
+    src: files/bashrc
+    dest: /root/.bashrc
+    mode: 0755
+
 # Setup NTP/Timezone
 - name: "[COMMON] Enable NTP"
   become: yes

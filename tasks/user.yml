@@ -6,6 +6,14 @@
     shell: /bin/bash
     create_home: yes
 
+- name: "[USER] Update .bashrc"
+  become: yes
+  become_user: "{{ app_user }}"
+  copy:
+    src: files/bashrc
+    dest: /home/{{ app_user }}/.bashrc
+    mode: 0755
+
 - name: "[USER] Create .ssh directory"
   become: yes
   become_user: "{{ app_user }}"
