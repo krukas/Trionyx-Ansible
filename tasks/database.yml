@@ -69,6 +69,8 @@
     mode: 0755
 
 - name: "[DATABASE] Enable cron backup"
+  become: yes
+  become_user: "{{ app_user }}"
   cron:
     name: "DB cron backup"
     minute: "0"
