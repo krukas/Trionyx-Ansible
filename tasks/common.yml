@@ -73,3 +73,28 @@
   become: yes
   ufw:
     state: enabled
+
+# Setup auto update
+- name: "[COMMON] Install unattended-upgrades"
+  become: yes
+  apt:
+    name: "unattended-upgrades"
+    state: present
+
+- name: "[COMMON] Update unattended-upgrades configuration"
+  become: yes
+  copy:
+    src: files/50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "[COMMON] Update auto-upgrades configuration"
+  become: yes
+  copy:
+    src: files/20auto-upgrades
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: 0644
