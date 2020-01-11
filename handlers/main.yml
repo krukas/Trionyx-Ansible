@@ -19,6 +19,11 @@
   service:
     name: gunicorn
     state: restarted
+- name: rabbitmq restart
+  become: yes
+  service:
+    name: rabbitmq-server
+    state: restarted
 - name: celery restart
   become: yes
   service:

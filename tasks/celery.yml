@@ -5,6 +5,16 @@
     name: rabbitmq-server
     state: present
 
+- name: "[CELERY] Update rabbitmq config"
+  become: yes
+  template:
+    src: "templates/celery/rabbitmq-env.conf.j2"
+    dest: "/etc/rabbitmq/rabbitmq-env.conf"
+    owner: rabbitmq
+    group: rabbitmq
+    mode: 0644
+  notify: rabbitmq restart
+
 - name: "[CELERY] Create rabbitmq user"
   become: yes
   rabbitmq_user:
