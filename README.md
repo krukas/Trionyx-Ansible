@@ -1,7 +1,7 @@
 Trionyx Ansible
 ===============
 
-An Ansible role to setup a complete [Trionyx](https://github.com/krukas/Trionyx) environment on a clean Ubuntu server.
+An Ansible role to setup a complete [Trionyx](https://github.com/krukas/Trionyx) environment on a clean Ubuntu 18.04 server.
 
 Setup an Ansible project that uses this role with:
 
