@@ -75,7 +75,7 @@
     name: "DB cron backup"
     minute: "0"
     hour: "3"
-    job: "pg_dump {{ db_name }} > \"/home/{{ app_user }}/backups/$(date '+%A').sql\""
+    job: "pg_dump {{ db_name }} > /home/{{ app_user }}/backups/$(date '+\\%A').sql"
 
 - name: "[DATABASE] Install pgbouncer"
   become: yes
