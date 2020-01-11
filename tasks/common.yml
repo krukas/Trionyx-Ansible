@@ -74,6 +74,23 @@
   ufw:
     state: enabled
 
+# Setup Fail2ban
+- name: "[COMMON] Install fail2ban"
+  become: yes
+  apt:
+    name: "fail2ban"
+    state: present
+
+- name: "[COMMON] Update fail2ban config"
+  become: yes
+  template:
+    src: "templates/common/jail.local.j2"
+    dest: /etc/fail2ban/jail.local
+    owner:  root
+    group: root
+    mode: 0644
+  notify: fail2ban restart
+
 # Setup auto update
 - name: "[COMMON] Install unattended-upgrades"
   become: yes

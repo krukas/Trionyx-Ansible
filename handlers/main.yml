@@ -1,4 +1,9 @@
 ---
+- name: fail2ban restart
+  become: yes
+  service:
+    name: fail2ban
+    state: restarted
 - name: postgresql restart
   become: yes
   service:

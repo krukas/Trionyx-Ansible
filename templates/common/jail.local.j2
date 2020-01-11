@@ -1,0 +1,9 @@
+[DEFAULT]
+banaction = ufw
+bantime = 1h
+findtime = 15m
+
+[sshd]
+enabled = true
+port = {{ ansible_ssh_port }}
+maxretry = 3
