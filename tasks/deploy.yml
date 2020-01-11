@@ -23,7 +23,7 @@
   become: yes
   become_user: "{{ app_user }}"
   block:
-    - name: "[DEPLOY] pull latest version from master"
+    - name: "[DEPLOY] pull latest version from repository"
       git:
         repo: "{{ app_repo }}"
         dest: "{{ app_path }}"
