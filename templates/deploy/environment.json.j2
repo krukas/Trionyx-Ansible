@@ -9,7 +9,8 @@
       "USER": "{{ db_username }}",
       "PASSWORD": "{{ db_password }}",
       "HOST": "/var/run/postgresql",
-      "PORT": "{{ db_pool_port }}"
+      "PORT": "{{ db_pool_port }}",
+      "DISABLE_SERVER_SIDE_CURSORS": true
     }
   }
 }
