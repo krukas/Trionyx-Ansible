@@ -51,7 +51,7 @@
     name: "ufw"
     state: present
 
-- name: "[COMMON] UFW: Add SSH rule to"
+- name: "[COMMON] UFW: Add SSH rule"
   become: yes
   ufw:
     rule: allow
