@@ -81,6 +81,20 @@
     name: "fail2ban"
     state: present
 
+- name: "[COMMON] Add fail2ban portscan filter"
+  become: yes
+  copy:
+    src: files/portscan.conf
+    dest: /etc/fail2ban/filter.d/portscan.conf
+    mode: 0755
+
+- name: "[COMMON] Add fail2ban repeat filter"
+  become: yes
+  copy:
+    src: files/f2b-repeat.conf
+    dest: /etc/fail2ban/filter.d/f2b-repeat.conf
+    mode: 0755
+
 - name: "[COMMON] Update fail2ban config"
   become: yes
   template:
