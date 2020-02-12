@@ -75,3 +75,9 @@
         command: compress
         app_path: "{{ app_path }}"
         virtualenv: "{{ app_environment_path }}"
+
+    - name: "[DEPLOY] Update favicon"
+      django_manage:
+        command: create_favicon
+        app_path: "{{ app_path }}"
+        virtualenv: "{{ app_environment_path }}"
