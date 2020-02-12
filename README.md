@@ -22,7 +22,7 @@ Setup your host
     touch /home/ansible/.ssh/authorized_keys
     
     read -p 'Ansible public ssh key: ' ansible_public_key
-    echo $ansible_public_key > /home/ansible/.ssh/authorized_keys
+    echo \$ansible_public_key > /home/ansible/.ssh/authorized_keys
     
     chmod 600 /home/ansible/.ssh/authorized_keys
     chown ansible -Rf /home/ansible/.ssh
