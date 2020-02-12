@@ -22,13 +22,6 @@
     rule: allow
     port: 443
 
-- name: "[WEB] Remove nginx default"
-  become: yes
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
-  notify: nginx restart
-
 - name: "[WEB] Update nginx config"
   become: yes
   template:
@@ -37,7 +30,6 @@
     owner: root
     group: root
     mode: 0644
-  notify: nginx restart
 
 - name: "[WEB] Generate a Self Signed OpenSSL certificate"
   become: yes
@@ -53,6 +45,15 @@
     mode: 0755
     owner: www-data
     group: www-data
+
+- name: "[WEB] Update default config"
+  become: yes
+  copy:
+    src: files/web/default
+    dest: /etc/nginx/sites-enabled/default
+    owner: root
+    group: root
+    mode: 0644
 
 - name: "[WEB] Config host 80"
   become: yes
