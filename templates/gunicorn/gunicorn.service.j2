@@ -5,13 +5,13 @@ After=network.target
 
 
 [Service]
-user={{ app_user }}
-group={{ app_user }}
+User={{ app_user }}
+Group={{ app_user }}
 
 TRIONYX_CONFIG={{ app_path }}/environment.json
 
 WorkingDirectory=/home/{{ app_user }}/application
-ExecStart={{ app_environment_path }}/bin/gunicorn --name={{ app_user }} --pythonpath={{ app_path }} --bind unix:{{ app_socket }} --config /etc/gunicorn.d/gunicorn.py wsgi:application
+ExecStart={{ app_environment_path }}/bin/gunicorn --name={{ app_user }} --pythonpath={{ app_path }} --bind unix:{{ app_socket }} --config /home/{{ app_user }}/gunicorn.py wsgi:application
 
 Restart=always
 SyslogIdentifier=gunicorn

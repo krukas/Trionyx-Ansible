@@ -21,20 +21,13 @@
     virtualenv: "{{ app_environment_path }}"
     virtualenv_python: python3
 
-- name: "[GUNICORN] Create config directory"
-  become: yes
-  file:
-    path: /etc/gunicorn.d
-    state: directory
-    mode: 0644
-
 - name: "[GUNICORN] Update config"
   become: yes
   copy:
     src: files/gunicorn.py
-    dest: /etc/gunicorn.d/gunicorn.py
-    owner: root
-    group: root
+    dest: "/home/{{ app_user }}/gunicorn.py"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
     mode: 0644
   notify: gunicorn restart
 
