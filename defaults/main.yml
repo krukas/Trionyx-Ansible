@@ -8,7 +8,8 @@ app_config_template: templates/deploy/environment.json.j2
 secret_key: mot-secure-key
 
 app_user: trionyx
-app_domain: trionyx.localhost
+main_domain: trionyx.localhost
+other_domains: []
 
 ntp_timezone: Etc/UTC
 

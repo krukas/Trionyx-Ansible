@@ -3,7 +3,7 @@ server {
     listen [::]:80;
 
     root {{ app_webroot_path }};
-    server_name {{ app_domain }};
+    server_name {{ main_domain }}{% if other_domains %} {% for domain in other_domains %}{{domain}} {% endfor %}{% endif %};
 
     location /.well-known {
         alias {{ app_webroot_path }}/.well-known;
@@ -12,6 +12,6 @@ server {
     }
 
     location / {
-        return 301 https://{{ app_domain }}$request_uri;
+        return 301 https://$host$request_uri;
     }
 }

@@ -72,14 +72,14 @@
 
 - name: "[WEB] Create Letsencrypt cert"
   become: yes
-  command: "certbot certonly --non-interactive --webroot --email info@workbundle.net --keep-until-expiring --expand --agree-tos -w {{ app_webroot_path }} -d {{ app_domain }}"
+  command: "certbot certonly --non-interactive --webroot --email info@workbundle.net --keep-until-expiring --expand --agree-tos -w {{ app_webroot_path }} -d {{ main_domain }}{% for domain in other_domains %} -w {{ app_webroot_path }} -d {{ domain }}{% endfor %}"
   args:
-    creates: "/etc/letsencrypt/live/{{ app_domain }}"
+    creates: "/etc/letsencrypt/live/{{ main_domain }}"
 
 - name: "[WEB] Create Letsencrypt crontab"
   become: yes
   cron:
-    name: "Letsencrypt {{ app_domain }} renewel"
+    name: "Letsencrypt {{ main_domain }} renewel"
     minute: "33"
     hour: "2"
     job: certbot renew --post-hook "systemctl reload nginx"

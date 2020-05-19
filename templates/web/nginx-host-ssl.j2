@@ -6,11 +6,11 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    ssl_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ app_domain }}/privkey.pem;
-    ssl_trusted_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
+    ssl_certificate /etc/letsencrypt/live/{{ main_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ main_domain }}/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/{{ main_domain }}/fullchain.pem;
 
-    server_name {{ app_domain }};
+    server_name {{ main_domain }}{% if other_domains %} {% for domain in other_domains %}{{domain}} {% endfor %}{% endif %};
     root {{ app_webroot_path }};
 
     client_max_body_size 4G;
