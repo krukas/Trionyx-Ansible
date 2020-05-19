@@ -21,4 +21,7 @@ db_username: trionyx
 db_password: not-secure-password
 db_pool_port: 6432
 
+celery_cron_workers_per_cpu: 2
+celery_low_prio_worker_per_cpu: 4
+celery_high_prio_worker_per_cpu: 1
 broker_password: not-secure-password

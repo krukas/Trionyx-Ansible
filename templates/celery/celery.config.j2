@@ -7,9 +7,9 @@ CELERY_APP="celery_app"
 
 # Extra command-line arguments to the worker
 CELERYD_OPTS="-Ofair \
--Q:cron_worker          cron        -c:cron_worker      {{ (ansible_processor_vcpus * 2) | int }} \
--Q:low_prio_worker      low_prio    -c:low_prio_worker  {{ (ansible_processor_vcpus * 4) | int }} \
--Q:high_prio_worker     high_prio   -c:high_prio_worker {{ (ansible_processor_vcpus * 1) | int }}"
+-Q:cron_worker          cron        -c:cron_worker      {{ (ansible_processor_vcpus * celery_cron_workers_per_cpu) | int }} \
+-Q:low_prio_worker      low_prio    -c:low_prio_worker  {{ (ansible_processor_vcpus * celery_low_prio_worker_per_cpu) | int }} \
+-Q:high_prio_worker     high_prio   -c:high_prio_worker {{ (ansible_processor_vcpus * celery_high_prio_worker_per_cpu) | int }}"
 
 # - %n will be replaced with the first part of the nodename.
 # - %I will be replaced with the current child process index
