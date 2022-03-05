@@ -28,7 +28,7 @@ Setup your host
     chown ansible -Rf /home/ansible/.ssh
     
     sudo apt-get update
-    sudo apt-get --assume-yes install python python-pip
+    sudo apt-get --assume-yes install python3 python3-pip  acl
     
     echo "Change SSH port to 6969 and restart ssh"
     sudo sed -i "s/#Port 22/Port 6969/" /etc/ssh/sshd_config
